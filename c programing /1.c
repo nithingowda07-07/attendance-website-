@@ -1,20 +1,20 @@
 #include <stdio.h>
 
 int main() {
-    float price, total = 0.0;
+    float item1, item2, item3, total;
 
-    printf("Enter item prices (enter a negative number to stop):\n");
+    printf("Enter the price of item 1: ");
+    scanf("%f", &item1);
 
-    while (1) {
-        printf("Enter price: ");
-        scanf("%f", &price);
+    printf("Enter the price of item 2: ");
+    scanf("%f", &item2);
 
-        if (price < 0) {
-            break; 
-        total += price;
-    }
+    printf("Enter the price of item 3: ");
+    scanf("%f", &item3);
 
-    printf("\nTotal Bill Amount: %.2f\n", total);
+    total = item1 + item2 + item3;
+
+    printf("The total bill is: %.2f\n", total);
 
     return 0;
-}}
+}

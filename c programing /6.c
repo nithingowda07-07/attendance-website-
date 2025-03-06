@@ -4,7 +4,6 @@ void main() {
     int age;
     float price;
 
-    // User input
     printf("Enter your age: ");
     scanf("%d", &age);
 
@@ -13,16 +12,16 @@ void main() {
         printf("Invalid age entered!\n");
     } 
     else if (age <= 10) {
-        price = 0.00f;  
+        price = 0.00;  
     }
-    else if (age <= 12) {
+    else if (age <= 15) {
         price = 250.00;  
     } 
     else if (age <= 60) {
-        price = 500.00f; 
+        price = 500.00; 
     } 
     else {
-        price = 400.00f;  
+        price = 400.00;  
     }
 
     if (age >= 0) {

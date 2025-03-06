@@ -18,8 +18,8 @@ int main() {
     scanf("%d", &m5);
 
     total = m1 + m2 + m3 + m4 + m5;
-    average = total / 5.0;
-    percentage = (total / 500.0) * 100;
+    average = total / 5;
+    percentage = (total / 500) * 100;
 
     printf("\nTotal Marks: %d\n", total);
     printf("Average Marks: %.2f\n", average);

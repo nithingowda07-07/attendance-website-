@@ -1,15 +1,17 @@
 #include <stdio.h>
 
-void main() {
-    double salary, increment, new_salary;
- 
+int main() {
+    float salary, increment, new_salary;
+
     printf("Enter current salary: ");
-    scanf("%lf", &salary);
+    scanf("%f", &salary);
 
     printf("Enter percentage increment: ");
-    scanf("%lf", &increment);
+    scanf("%f", &increment);
 
     new_salary = salary + (salary * increment / 100);
 
-    printf("Updated salary: %.2lf\n", new_salary);
+    printf("Updated salary: %.2f\n", new_salary);
+
+    return 0;
 }

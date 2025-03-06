@@ -1,14 +1,14 @@
 #include <stdio.h>
 
 int main() {
-    double principal, rate, monthlyRate, emi, power = 1;
+    float principal, rate, monthlyRate, emi, power = 1;
     int tenure, months, i;
 
     printf("Enter principal amount: ");
-    scanf("%lf", &principal);
+    scanf("%f", &principal);
 
     printf("Enter annual interest rate (in percentage): ");
-    scanf("%lf", &rate);
+    scanf("%f", &rate);
 
     printf("Enter loan tenure (in years): ");
     scanf("%d", &tenure);
@@ -22,5 +22,7 @@ int main() {
 
     emi = (principal * monthlyRate * power) / (power - 1);
 
-    printf("Monthly EMI: %.2lf\n", emi);
+    printf("Monthly EMI: %.2f\n", emi);
+
+    return 0;
 }
