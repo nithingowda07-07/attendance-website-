@@ -1,0 +1,1089 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Management System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #3b82f6;
+            --secondary: #f59e0b;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f97316;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f1f5f9;
+            color: var(--dark);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Auth Forms */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .auth-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .auth-card h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        .form-control.error {
+            border-color: var(--danger);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e09b0e;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-3 {
+            margin-top: 15px;
+        }
+
+        .toggle-form {
+            color: var(--primary);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .nav-tabs {
+            display: flex;
+            list-style: none;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .nav-tabs li {
+            padding: 10px 20px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .nav-tabs li.active {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .nav-tabs li.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            height: 2px;
+            width: 100%;
+            background-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table th, table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-top: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #f8fafc;
+            font-weight: 600;
+        }
+
+        table tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background-color: #d1fae5;
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background-color: #ffedd5;
+            color: var(--warning);
+        }
+
+        .badge-danger {
+            background-color: #fee2e2;
+            color: var(--danger);
+        }
+
+        .progress-container {
+            width: 100%;
+            background-color: #e5e7eb;
+            border-radius: 10px;
+            height: 10px;
+            margin-top: 30px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 10px;
+            background-color: var(--primary);
+            transition: width 0.3s;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        .attendance-summary {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .attendance-card {
+            flex: 1;
+            padding: 20px;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            text-align: center;
+        }
+
+        .attendance-card h3 {
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .attendance-card p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            color: var(--danger);
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .chart-container {
+            height: 300px;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .attendance-summary {
+                flex-direction: column;
+            }
+        }
+        /* Days checkbox group styles moved from script */
+        .days-checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        .days-checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: normal;
+        }
+    </style>
+</head>
+<body>
+    <!-- Auth Section -->
+    <div class="auth-container" id="auth-section">
+        <div class="auth-card">
+            <div id="login-form">
+                <h2>Login</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+                <p class="text-center mt-3">Don't have an account? <span class="toggle-form" id="showSignup">Sign up</span></p>
+            </div>
+            <div id="signup-form" style="display: none;">
+                <h2>Sign Up</h2>
+                <form id="signupForm">
+                    <div class="form-group">
+                        <label for="signupName">Full Name</label>
+                        <input type="text" id="signupName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupEmail">Email</label>
+                        <input type="email" id="signupEmail" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <input type="password" id="signupPassword" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupConfirmPassword">Confirm Password</label>
+                        <input type="password" id="signupConfirmPassword" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Sign Up</button>
+                </form>
+                <p class="text-center mt-3">Already have an account? <span class="toggle-form" id="showLogin">Login</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div class="dashboard container" id="dashboard-section">
+        <div class="header">
+            <div class="logo">AttendancePro</div>
+            <button class="logout-btn" id="logoutBtn">Logout</button>
+        </div>
+
+        <ul class="nav-tabs">
+            <li class="active" data-tab="dashboard">Dashboard</li>
+            <li data-tab="timetable">Timetable</li>
+            <li data-tab="attendance">Attendance</li>
+            <li data-tab="exams">Exam Days</li>
+        </ul>
+
+        <div class="tab-content active" id="dashboard-tab">
+            <div class="card">
+                <h2 class="card-title">Welcome, <span id="userNameDisplay"></span>!</h2>
+                <p>Track and manage your attendance efficiently with AttendancePro.</p>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title">Attendance Overview</h2>
+                <div class="attendance-summary">
+                    <div class="attendance-card">
+                        <h3 id="totalClasses">0</h3>
+                        <p>Total Classes</p>
+                    </div>
+                    <div class="attendance-card">
+                        <h3 id="attendedClasses">0</h3>
+                        <p>Attended Classes</p>
+                    </div>
+                    <div class="attendance-card">
+                        <h3 id="attendancePercentage">0%</h3>
+                        <p>Overall Percentage</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title">Subject-wise Attendance</h2>
+                <table id="subjectTable">
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Total Classes</th>
+                            <th>Attended</th>
+                            <th>Percentage</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Will be populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tab-content" id="timetable-tab">
+            <div class="card">
+                <h2 class="card-title">Create Timetable</h2>
+                <form id="timetableForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="subjectName">Subject Name</label>
+                            <input type="text" id="subjectName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Days</label>
+                            <div class="days-checkbox-group">
+                                <label><input type="checkbox" name="subjectDay" value="Monday"> Monday</label>
+                                <label><input type="checkbox" name="subjectDay" value="Tuesday"> Tuesday</label>
+                                <label><input type="checkbox" name="subjectDay" value="Wednesday"> Wednesday</label>
+                                <label><input type="checkbox" name="subjectDay" value="Thursday"> Thursday</label>
+                                <label><input type="checkbox" name="subjectDay" value="Friday"> Friday</label>
+                                <label><input type="checkbox" name="subjectDay" value="Saturday"> Saturday</label>
+                                <label><input type="checkbox" name="subjectDay" value="Sunday"> Sunday</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add to Timetable</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title">Your Timetable</h2>
+                <table id="timetableTable">
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Day(s)</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Will be populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tab-content" id="attendance-tab">
+            <div class="card">
+                <h2 class="card-title">Mark Attendance</h2>
+                <form id="attendanceForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="attendanceDate">Date</label>
+                            <input type="date" id="attendanceDate" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="attendanceSubject">Subject</label>
+                            <select id="attendanceSubject" class="form-control" required>
+                                <option value="">Select Subject</option>
+                                <!-- Will be populated by JS -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="attendanceStatus">Status</label>
+                        <select id="attendanceStatus" class="form-control" required>
+                            <option value="present">Present</option>
+                            <option value="absent">Absent</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Attendance</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title">Attendance History</h2>
+                <table id="attendanceHistoryTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Subjects</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Will be populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tab-content" id="exams-tab">
+            <div class="card">
+                <h2 class="card-title">Add Exam Day</h2>
+                <form id="examForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="examDate">Exam Date</label>
+                            <input type="date" id="examDate" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="examName">Exam Name</label>
+                            <input type="text" id="examName" class="form-control" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Exam Day</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title">Upcoming Exams</h2>
+                <table id="examTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Exam Name</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Will be populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const authSection = document.getElementById('auth-section');
+        const dashboardSection = document.getElementById('dashboard-section');
+        const loginForm = document.getElementById('loginForm');
+        const signupForm = document.getElementById('signupForm');
+        const showSignup = document.getElementById('showSignup');
+        const showLogin = document.getElementById('showLogin');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const userNameDisplay = document.getElementById('userNameDisplay');
+        const navTabs = document.querySelectorAll('.nav-tabs li');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        // Check if user is already logged in
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                authSection.style.display = 'none';
+                dashboardSection.style.display = 'block';
+                userNameDisplay.textContent = currentUser.name;
+                loadDashboardData();
+            }
+        });
+
+        // Toggle between login and signup forms
+        showSignup.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('signup-form').style.display = 'block';
+        });
+
+        showLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('signup-form').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
+        });
+
+        // Navigation tabs
+        navTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                navTabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+            });
+        });
+
+        // Sign Up function
+        function handleSignup() {
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('signupConfirmPassword').value;
+            
+            if (!name || !email || !password || !confirmPassword) {
+                alert('Please fill in all fields');
+                return false;
+            }
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return false;
+            }
+            
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            
+            if (users.some(u => u.email === email)) {
+                alert('Email already registered');
+                return false;
+            }
+            
+            users.push({ name, email, password });
+            localStorage.setItem('users', JSON.stringify(users));
+            return true;
+        }
+
+        // Signup form handler
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (handleSignup()) {
+                alert('Account created! Please login.');
+                document.getElementById('signup-form').style.display = 'none';
+                document.getElementById('login-form').style.display = 'block';
+                signupForm.reset();
+            }
+        });
+
+        // Login function
+        function handleLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(u => u.email === email);
+            
+            if (!user) {
+                showError('User not found');
+                return false;
+            }
+            
+            if (user.password !== password) {
+                showError('Incorrect password');
+                return false;
+            }
+            
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            authSection.style.display = 'none';
+            dashboardSection.style.display = 'block';
+            userNameDisplay.textContent = user.name;
+            loadDashboardData();
+            return true;
+        }
+
+        // Show error message
+        function showError(message) {
+            alert(message);
+            document.getElementById('loginEmail').classList.add('error');
+            document.getElementById('loginPassword').classList.add('error');
+            setTimeout(() => {
+                document.getElementById('loginEmail').classList.remove('error');
+                document.getElementById('loginPassword').classList.remove('error');
+            }, 3000);
+        }
+
+        // Login form handler
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!document.getElementById('loginEmail').value || 
+                !document.getElementById('loginPassword').value) {
+                showError('Please fill in all fields');
+                return;
+            }
+            handleLogin();
+        });
+
+        // Logout
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('currentUser');
+            authSection.style.display = 'flex';
+            dashboardSection.style.display = 'none';
+        });
+
+        // Load dashboard data
+        function loadDashboardData() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) return;
+            
+            // Load timetable
+            loadTimetable();
+            
+            // Load attendance
+            loadAttendance();
+            
+            // Load exams
+            loadExams();
+        }
+
+        // Timetable functions
+        function loadTimetable() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) return;
+            
+            let timetable = JSON.parse(localStorage.getItem(`timetable_${currentUser.email}`)) || [];
+            const timetableTableBody = document.querySelector('#timetableTable tbody');
+            timetableTableBody.innerHTML = '';
+            
+            // Group subjects by name and display all days for each
+            const subjectsByDay = {};
+            timetable.forEach(item => {
+                if (!subjectsByDay[item.name]) {
+                    subjectsByDay[item.name] = [];
+                }
+                subjectsByDay[item.name].push(item.day);
+            });
+
+            for (const subject in subjectsByDay) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${subject}</td>
+                    <td>${subjectsByDay[subject].join(', ')}</td>
+                    <td>
+                        <button class="btn btn-secondary" onclick="removeTimetableItem('${subject}')">Remove</button>
+                    </td>
+                `;
+                timetableTableBody.appendChild(row);
+            }
+            
+            // Update attendance subject dropdown
+            const attendanceSubjectDropdown = document.getElementById('attendanceSubject');
+            attendanceSubjectDropdown.innerHTML = '<option value="">Select Subject</option>';
+            
+            // Populate dropdown with unique subjects from timetable
+            const uniqueSubjects = Array.from(new Set(timetable.map(item => item.name)));
+            uniqueSubjects.forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.textContent = subject;
+                attendanceSubjectDropdown.appendChild(option);
+            });
+        }
+
+        // Add to timetable
+        document.getElementById('timetableForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) return;
+            
+            const subjectName = document.getElementById('subjectName').value;
+            const checkedDays = document.querySelectorAll('input[name="subjectDay"]:checked');
+            
+            if (checkedDays.length === 0) {
+                alert('Please select at least one day');
+                return;
+            }
+            
+            let timetable = JSON.parse(localStorage.getItem(`timetable_${currentUser.email}`)) || [];
+            
+            // Check if subject already exists for any selected day
+            checkedDays.forEach(checkbox => {
+                const day = checkbox.value;
+                if (timetable.some(subject => subject.name === subjectName && subject.day === day)) {
+                    alert(`Subject already exists for ${day}!`);
+                    return;
+                }
+            });
+            
+            // Add entries for each selected day
+            checkedDays.forEach(checkbox => {
+                timetable.push({ 
+                    name: subjectName, 
+                    day: checkbox.value 
+                });
+            });
+            
+            localStorage.setItem(`timetable_${currentUser.email}`, JSON.stringify(timetable));
+            
+            loadTimetable();
+            document.getElementById('timetableForm').reset();
+        });
+
+        // Remove timetable item
+        function removeTimetableItem(subjectName) {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) return;
+            
+            let timetable = JSON.parse(localStorage.getItem(`timetable_${currentUser.email}`)) || [];
+            // Remove all entries for this subject
+            timetable = timetable.filter(subject => subject.name !== subjectName);
+            localStorage.setItem(`timetable_${currentUser.email}`, JSON.stringify(timetable));
+            
+            loadTimetable();
+            loadAttendance(); // Refresh attendance as subjects might have changed
+        }
+
+        // Attendance functions
+        function loadAttendance() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) return;
+            
+            let timetable = JSON.parse(localStorage.getItem(`timetable_${currentUser.email}`)) || [];
+            let attendance = JSON.parse(localStorage.getItem(`attendance_${currentUser.email}`)) || [];
+            let exams = JSON.parse(localStorage.getItem(`exams_${currentUser.email}`)) || [];
+            
+            // Filter out attendance on exam days
+            attendance = attendance.filter(record => {
+                return !exams.some(exam => exam.date === record.date);
+            });
+            
+            // Calculate stats
+            let stats = {};
+            timetable.forEach(subject => {
+                stats[subject.name] = {
+                    total: 0,
+                    attended: 0,
+                    percentage: 0
+                };
+            });
+            
+            attendance.forEach(record => {
+                if (record.status === 'present') {
+                    stats[record.subject].attended++;
+                    stats[record.subject].total++;
+                } else if (record.status === 'absent') {
+                    stats[record.subject].total++;
+                }
+            });
+            
+            // Calculate percentages (avoid division by zero)
+            for (const subject in stats) {
+                if (stats[subject].total > 0) {
+                    stats[subject].percentage = Math.round((stats[subject].attended / stats[subject].total) * 100);
+                }
+            }
+            
+            // Update dashboard stats
+            updateDashboardStats(stats);
+            
+            // Update attendance history table
+            const attendanceHistoryTableBody = document.querySelector('#attendanceHistoryTable tbody');
+            attendanceHistoryTableBody.innerHTML = '';
+            
+            // Group attendance by date
+            const attendanceByDate = {};
+            attendance.forEach(record => {
+                if (!attendanceByDate[record.date]) {
+                    attendanceByDate[record.date] = {};
+                }
+                attendanceByDate[record.date][record.subject] = record.status;
+            });
+            
+            // Display grouped attendance
+            for (const date in attendanceByDate) {
+                const row = document.createElement('tr');
+                
+                // Format subjects and statuses
+                let subjectsHtml = '';
+                let statusesHtml = '';
+                for (const subject in attendanceByDate[date]) {
+                    subjectsHtml += `<div>${subject}</div>`;
+                    const status = attendanceByDate[date][subject];
+                    const statusClass = status === 'present' ? 'badge-success' : 'badge-danger';
+                    statusesHtml += `<div><span class="badge ${statusClass}">${status.charAt(0).toUpperCase() + status.slice(1)}</span></div>`;
+                }
+                
+                row.innerHTML = `
+                    <td>${formatDate(date)}</td>
+                    <td>${subjectsHtml}</td>
+                    <td>${statusesHtml}</td>
+                    <td>
+                        <button class="btn btn-secondary" onclick="removeAttendanceByDate('${date}')">Remove</button>
+                    </td>
+                `;
+                attendanceHistoryTableBody.appendChild(row);
+            }
+        }
+
+        // Update dashboard stats
+        function updateDashboardStats(stats) {
+            const subjectTableBody = document.querySelector('#subjectTable tbody');
+            subjectTableBody.innerHTML = '';
+            
+            let totalClasses = 0;
+            let attendedClasses = 0;
+            
+            for (const subject in stats) {
+                const row = document.createElement('tr');
+                
+                // Status indicator
+                let statusBadge = '';
+                let badgeClass = '';
+                if (stats[subject].percentage >= 75) {
+                    badgeClass = 'badge-success';
+                    statusBadge = 'Good';
+                } else if (stats[subject].percentage >= 50) {
+                    badgeClass = 'badge-warning';
+                    statusBadge = 'Warning';
+                } else {
+                    badgeClass = 'badge-danger';
+                    statusBadge = 'Critical';
+                }
+                
+                row.innerHTML = `
+                    <td>${subject}</td>
+                    <td>${stats[subject].total}</td>
+                    <td>${stats[subject].attended}</td>
+                    <td>
+                        <div class="progress-container">
+                            <div class="progress-bar" style="width: ${stats[subject].percentage}%"></div>
+                        </div>
+                        <div class="progress-label">
+                            <span>${stats[subject].percentage}%</span>
+                            <span>75% Required</span>
+                        </div>
+                    </td>
+                    <td><span class="badge ${badgeClass}">${statusBadge}</span></td>
+                `;
+                subjectTableBody.appendChild(row);
+                
+                totalClasses += stats[subject].total;
+                attendedClasses += stats[subject].attended;
+            }
+            
+            // Update overall stats
+            document.getElementById('totalClasses').textContent = totalClasses;
+            document.getElementById('attendedClasses').textContent = attendedClasses;
+            
+            const overallPercentage = totalClasses > 0 ? Math.round((attendedClasses / totalClasses) * 100) : 0;
+            document.getElementById('attendancePercentage').textContent = `${overallPercentage}%`;
+        }
+
+        // Add attendance
+        document.getElementById('attendanceForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) return;
+            
+            const date = document.getElementById('attendanceDate').value;
+            const subject = document.getElementById('attendanceSubject').value;
+            const status = document.getElementById('attendanceStatus').value;
+            
+            if (!date || !subject || !status) {
+                alert('Please fill all fields!');
+                return;
+            }
+            
+            let attendance = JSON.parse(localStorage.getItem(`attendance_${currentUser.email}`)) || [];
+            
+            // Check if attendance for this subject on this date already exists
+            const existingIndex = attendance.findIndex(record => 
+                record.date === date && record.subject === subject
+            );
+            
+            if (existingIndex !== -1) {
+                // Update existing record
+                attendance[existingIndex].status = status;
+            } else {
+                // Add new record
+                attendance.push({ date, subject, status });
+            }
+            
+            localStorage.setItem(`attendance_${currentUser.email}`, JSON.stringify(attendance));
+            
+            loadAttendance();
+            document.getElementById('attendanceForm').reset();
+        });
+
+        // Remove attendance by date
+        function removeAttendanceByDate(date) {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) return;
+            
+            let attendance = JSON.parse(localStorage.getItem(`attendance_${currentUser.email}`)) || [];
+            attendance = attendance.filter(record => record.date !== date);
+            localStorage.setItem(`attendance_${currentUser.email}`, JSON.stringify(attendance));
+            
+            loadAttendance();
+        }
+
+        // Exam functions
+        function loadExams() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) return;
+            
+            let exams = JSON.parse(localStorage.getItem(`exams_${currentUser.email}`)) || [];
+            const examTableBody = document.querySelector('#examTable tbody');
+            examTableBody.innerHTML = '';
+            
+            exams.forEach((exam, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${formatDate(exam.date)}</td>
+                    <td>${exam.name}</td>
+                    <td>
+                        <button class="btn btn-secondary" onclick="removeExam(${index})">Remove</button>
+                    </td>
+                `;
+                examTableBody.appendChild(row);
+            });
+        }
+
+        // Add exam
+        document.getElementById('examForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) return;
+            
+            const examDate = document.getElementById('examDate').value;
+            const examName = document.getElementById('examName').value;
+            
+            if (!examDate || !examName) {
+                alert('Please fill all fields!');
+                return;
+            }
+            
+            let exams = JSON.parse(localStorage.getItem(`exams_${currentUser.email}`)) || [];
+            
+            // Check if exam date already exists
+            if (exams.some(exam => exam.date === examDate)) {
+                alert('Exam already exists for this date!');
+                return;
+            }
+            
+            exams.push({ date: examDate, name: examName });
+            localStorage.setItem(`exams_${currentUser.email}`, JSON.stringify(exams));
+            
+            loadExams();
+            loadAttendance(); // Refresh attendance as exam days affect calculations
+            document.getElementById('examForm').reset();
+        });
+
+        // Remove exam
+        function removeExam(index) {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) return;
+            
+            let exams = JSON.parse(localStorage.getItem(`exams_${currentUser.email}`)) || [];
+            exams.splice(index, 1);
+            localStorage.setItem(`exams_${currentUser.email}`, JSON.stringify(exams));
+            
+            loadExams();
+            loadAttendance(); // Refresh attendance as exam days affect calculations
+        }
+
+        // Helper functions
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+    </script>
+</body>
+</html>
